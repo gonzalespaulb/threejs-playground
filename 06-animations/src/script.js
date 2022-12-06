@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 const canvas = document.querySelector("canvas.webgl");
 
@@ -56,4 +57,35 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setClearColor("#023047");
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
+
+// Clock
+// const clock = new THREE.Clock();
+
+// Time 
+// let time = Date.now();
+
+gsap.to(group.position, {duration: 1, delay: 1, x: 2})
+gsap.to(group.position, {duration: 1, delay: 2, x: -1})
+
+// Animations
+const tick = () => {
+    
+    // Keep the framerate the same for all resolutions
+    // const currentTime = Date.now();
+    // const deltaTime = currentTime - time;
+    // time = currentTime;
+
+    // group.rotation.y += 0.001 * deltaTime;
+    // group.rotation.x += 0.001 * deltaTime;
+
+    // const elapsedTime = clock.getElapsedTime();
+    // group.rotation.x = elapsedTime;
+    // group.position.y = Math.sin(elapsedTime);
+
+    renderer.render(scene, camera);
+
+    // Will call the tick function over an over
+    window.requestAnimationFrame(tick);
+};
+
+tick();
