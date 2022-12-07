@@ -23,9 +23,36 @@ scene.add(mesh)
  * Sizes
  */
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight,
 }
+
+window.addEventListener('resize', () =>
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+    
+// NOTE ----------------------------------------------------------------------- resize the canvas with the window
+    // Update camera 
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+
+    // Update renderer
+    renderer.setSize(sizes.width , sizes.height);
+})
+
+// NOTE ----------------------------------------------------------------------- wont work on safari without webkit
+window.addEventListener('dblclick', () => {
+    if(!document.fullscreenElement) {
+        console.log('go full screen');
+        canvas.requestFullscreen();
+    }
+    else {
+        console.log('leave full screen');
+        document.exitFullscreen();
+    }
+});
 
 /**
  * Camera
@@ -46,6 +73,9 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
+
+// NOTE------------------------------------------------------------------ will remove the stairs and blurs on the render
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 /**
  * Animate
