@@ -4,6 +4,30 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import gsap from "gsap";
 import GUI from "lil-gui";
 
+// NOTE ---------------------------------------------------------------- Reusables
+
+const scaler = (folderVar, meshName) => {
+  const scaleX = folderVar.add(meshName.scale, "x");
+  scaleX
+    .min(0)
+    .max(100)
+    .step(0.01)
+    .name("x-scale");
+
+const scaleY = folderVar.add(meshName.scale, "y");
+  scaleY
+    .min(0)
+    .max(100)
+    .step(0.01)
+    .name("y-scale");
+
+const scaleZ = folderVar.add(meshName.scale, "z");
+  scaleZ
+    .min(0)
+    .max(100)
+    .step(0.01)
+    .name("z-scale");
+}
 
 // NOTE ---------------------------------------------------------------- Starters
 
@@ -67,26 +91,11 @@ section1.receiveShadow = true;
 sectionalCouch.add(section1);
 
 const couchSection1 = gui.addFolder("Section1");
-const sectionScaleX = couchSection1.add(section1.scale, "x");
-  sectionScaleX
-    .min(0)
-    .max(100)
-    .step(0.01)
-    .name("x-scale");
+scaler(couchSection1, section1);
 
-const sectionScaleY = couchSection1.add(section1.scale, "y");
-  sectionScaleY
-    .min(0)
-    .max(100)
-    .step(0.01)
-    .name("y-scale");
-
-const sectionScaleZ = couchSection1.add(section1.scale, "z");
-  sectionScaleZ
-    .min(0)
-    .max(100)
-    .step(0.01)
-    .name("z-scale");
+section1.position.x = section1X / 2;
+section1.position.z = (section1X / 2) + 14;
+section1.position.y = section1Y / 2;
 
 // NOTE ---------------------------------------------------------------- Section 2
 
@@ -99,16 +108,21 @@ const section2 = new THREE.Mesh(
   new THREE.MeshBasicMaterial({
     color: "#d4a373",
   })
-)
-section2.position.x = section1X + 15;
-section2.position.z = (section2Z - section1Z) / 2;
+);
+
+const couchSection2 = gui.addFolder("Section2");
+scaler(couchSection2, section2);
+
+section2.position.x = (section2X / 2) + section1X;
+section2.position.z = section2Z / 2;
+section2.position.y = section2Y / 2;
 sectionalCouch.add(section2);
 
 // NOTE ---------------------------------------------------------------- Add to scene
 scene.add(sectionalCouch);
 scene.add(axesHelper);
 
-camera.position.set(50, 50, 50);
+camera.position.set(70, 70, 90);
 scene.add(camera);
 
 const controls = new OrbitControls(camera, canvas);
