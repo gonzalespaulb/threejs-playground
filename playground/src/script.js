@@ -3,11 +3,10 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import gsap from "gsap";
 import GUI from "lil-gui";
-// Cursor Coordinates
 
-/**
- * Base
- */
+
+// NOTE ---------------------------------------------------------------- Starters
+
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 const gui = new GUI({ width: 400 });
@@ -18,46 +17,98 @@ const sizes = {
   height: window.innerHeight,
 };
 
-const colors = {
-  base: "#99582a",
-};
-
 const aspectRatio = sizes.width / sizes.height;
-
 const scene = new THREE.Scene();
-const axesHelper = new THREE.AxesHelper(3);
+const axesHelper = new THREE.AxesHelper(100);
 const camera = new THREE.PerspectiveCamera(75, aspectRatio);
 const renderer = new THREE.WebGL1Renderer({
   canvas,
 });
 
-// NOTE ---------------------------------------------------------------- Chair group
-const chair = new THREE.Group();
+// NOTE ---------------------------------------------------------------- Resize canvas
+window.addEventListener('resize', () => {
 
-// NOTE ---------------------------------------------------------------- Seat
-const seat = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
+  // Update size
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // Update Camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // Update Renderer
+  renderer.setSize(sizes.width, sizes.height);
+
+  // Remove jagged edges
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+})
+
+const colors = {
+  base: "#99582a",
+};
+
+// NOTE ---------------------------------------------------------------- Whole Couch
+const sectionalCouch = new THREE.Group();
+
+// NOTE ---------------------------------------------------------------- Section 1
+
+const section1X = 27;
+const section1Y = 14;
+const section1Z = 55;
+
+const section1 = new THREE.Mesh(
+  new THREE.BoxGeometry(section1X, section1Y, section1Z),
   new THREE.MeshBasicMaterial({
     color: colors.base,
   })
 );
-chair.add(seat);
+section1.castShadow = true;
+section1.receiveShadow = true;
+sectionalCouch.add(section1);
 
-const chairSeat = gui.addFolder("Seat");
-const seatScaleX = chairSeat.add(seat.scale, "x");
-seatScaleX.min(0).max(10).step(0.01).name("x-scale");
+const couchSection1 = gui.addFolder("Section1");
+const sectionScaleX = couchSection1.add(section1.scale, "x");
+  sectionScaleX
+    .min(0)
+    .max(100)
+    .step(0.01)
+    .name("x-scale");
 
-const seatScaleY = chairSeat.add(seat.scale, "y");
-seatScaleY.min(0).max(10).step(0.01).name("y-scale");
+const sectionScaleY = couchSection1.add(section1.scale, "y");
+  sectionScaleY
+    .min(0)
+    .max(100)
+    .step(0.01)
+    .name("y-scale");
 
-const seatScaleZ = chairSeat.add(seat.scale, "z");
-seatScaleZ.min(0).max(10).step(0.01).name("z-scale");
+const sectionScaleZ = couchSection1.add(section1.scale, "z");
+  sectionScaleZ
+    .min(0)
+    .max(100)
+    .step(0.01)
+    .name("z-scale");
+
+// NOTE ---------------------------------------------------------------- Section 2
+
+const section2X = 57;
+const section2Y = 14;
+const section2Z = 31;
+
+const section2 = new THREE.Mesh(
+  new THREE.BoxGeometry(section2X, section2Y, section2Z),
+  new THREE.MeshBasicMaterial({
+    color: "#d4a373",
+  })
+)
+section2.position.x = section1X + 15;
+section2.position.z = (section2Z - section1Z) / 2;
+sectionalCouch.add(section2);
+
 // NOTE ---------------------------------------------------------------- Add to scene
-scene.add(chair);
+scene.add(sectionalCouch);
 scene.add(axesHelper);
 
-camera.position.set(0, 0, 3);
-
+camera.position.set(50, 50, 50);
 scene.add(camera);
 
 const controls = new OrbitControls(camera, canvas);
