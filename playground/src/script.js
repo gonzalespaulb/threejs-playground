@@ -29,6 +29,9 @@ const scaleZ = folderVar.add(meshName.scale, "z");
     .name("z-scale");
 }
 
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load('/couchTexture.jpeg');
+
 // NOTE ---------------------------------------------------------------- Starters
 
 // Canvas
@@ -83,7 +86,7 @@ const section1Z = 55;
 const section1 = new THREE.Mesh(
   new THREE.BoxGeometry(section1X, section1Y, section1Z),
   new THREE.MeshBasicMaterial({
-    color: colors.base,
+    map: texture,
   })
 );
 section1.castShadow = true;
@@ -106,7 +109,7 @@ const section2Z = 31;
 const section2 = new THREE.Mesh(
   new THREE.BoxGeometry(section2X, section2Y, section2Z),
   new THREE.MeshBasicMaterial({
-    color: "#d4a373",
+    map: texture,
   })
 );
 
